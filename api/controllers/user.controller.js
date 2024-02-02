@@ -1,4 +1,4 @@
-import User from "../modals/user.model"
+import User from "../modals/user.model.js"
 import { errorHandler } from "../utils/error.js"
 import bcrypt from "bcrypt"
 
@@ -8,6 +8,7 @@ export const test = (req, res) => {
 
 
 export const updateUser = async (req, res, next) => {
+    console.log("inside backend")
     if (req.user.id !== req.params.userId) {
         return next(errorHandler(403, "You are not alowed to update this user"))
     }
@@ -20,7 +21,7 @@ export const updateUser = async (req, res, next) => {
 
 
     if (req.body.username) {
-        if (req.body.username < 6 || req.body.username > 30) {
+        if (req.body.username.length < 6 || req.body.username.length > 30) {
             return next(errorHandler(400, "Username must be between 6 and 30 characters "))
         }
         if (req.body.username.includes(' ')) {
@@ -32,22 +33,23 @@ export const updateUser = async (req, res, next) => {
         if (!req.body.username.match(/^[a-zA-z0-9]+$/)) {
             return next(errorHandler(400, "Username must not contain any special characters"))
         }
+    }
 
-        try {
-            const updatesUser = await User.findByIdAndUpdate(req.params.userId, {
-                $set: {
-                    username: req.body.username,
-                    email: req.body.email,
-                    password: req.body.password,
-                    profilePicture: req.body.profilePicture
-                }
-            }, { new: true })
+    try {
+        const updatedUser = await User.findByIdAndUpdate(req.params.userId, {
+            $set: {
+                username: req.body.username,
+                email: req.body.email,
+                password: req.body.password,
+                profilePicture: req.body.profilePicture
+            }
+        }, { new: true })
 
-            const { password, ...rest } = updateUser._doc
-            res.status(200).json(rest)
-        } catch (err) {
-            return next(err)
-        }
+            
+        const { password:pass, ...rest } = updatedUser._doc
+        res.status(200).json(rest)
+    } catch (err) {
+        return next(err)
     }
 }
 

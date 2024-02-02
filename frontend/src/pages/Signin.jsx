@@ -42,7 +42,6 @@ const Signin = () => {
           navigate('/')
         }
       } catch (err) {
-        console.log("error")
         dispatch(signInFailure(err.message))
       }
     }
