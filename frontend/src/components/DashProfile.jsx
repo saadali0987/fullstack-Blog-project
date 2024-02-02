@@ -108,12 +108,15 @@ const DashProfile = () => {
                 setUpdateFail(data.message)
                 dispatch(updateFailure(data.message))
                 setFormData({})
+                setImageUploadProgress(null)
+
             }
             else
             {
                 dispatch(updateSuccess(data ))
                 setUpdateDone("Profile Updated Succesfuly")
                 setFormData({})
+                setImageUploadProgress(null)
             }
         }catch(err)
         {
