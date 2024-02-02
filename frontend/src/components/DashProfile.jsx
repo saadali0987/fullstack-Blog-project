@@ -13,6 +13,7 @@ const DashProfile = () => {
     const [imageUploadError, setImageUploadError] = useState(null)
     const filePickerRef = useRef()
     const { currentUser } = useSelector(state => state.user)
+    
     const handleImageChange = (e)=>{
         const file = e.target.files[0]
         if(file)
