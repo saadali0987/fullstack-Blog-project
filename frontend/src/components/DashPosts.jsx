@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Table } from 'flowbite-react'
+import { Button, Table } from 'flowbite-react'
 import {Link} from 'react-router-dom'
 
 const DashPosts = () => {
   const { currentUser } = useSelector((state) => state.user)
   const [postsData, setPostsData] = useState([])
+  const [showMore, setShowMore] = useState(true)
   console.log(postsData)
   useEffect(() => {
     const fetchData = async () => {
@@ -15,6 +16,9 @@ const DashPosts = () => {
 
         if (res.ok) {
           setPostsData(data.posts)
+          if(data.posts.length < 9){
+            setShowMore(false)
+          }
         }
       } catch (err) {
         console.log(err)
@@ -27,9 +31,26 @@ const DashPosts = () => {
   }, [currentUser._id])
 
 
+  const handleShowMore = async()=>{
+    const startIndex = postsData.length
+    try{
+      const res = await fetch(`/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`)
+      const data = await res.json()
+      if(res.ok){
+        setPostsData((prev)=>setPostsData([...prev, ...data.posts]))
+        if(data.posts.length < 9){
+          setShowMore(false)
+        }
+      }
+    }catch(err)
+    {
+
+    }
+  }
   return (
     <div className=' overflow-x-scroll p-3 md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
       {currentUser.isAdmin && postsData && postsData.length > 0 ? (
+        <>
         <Table hoverable className='shadow-md'>
           <Table.Head>
             <Table.HeadCell>Date Updated</Table.HeadCell>
@@ -75,6 +96,8 @@ const DashPosts = () => {
             ))}
           </Table.Body>
         </Table>
+        {showMore && (<Button onClick={handleShowMore} className='w-full self-center text-xs mt-4 '>Show More</Button>)}
+        </>
       ) : (<p>You have no posts yet...</p>)}
     </div>
   )
