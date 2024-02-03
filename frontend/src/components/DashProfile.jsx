@@ -7,6 +7,7 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { updateStart, updateFailure, updateSuccess, deleteFailure, deleteStart, deleteSuccess } from '../redux/user/userSlice.js'
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
+import { Link } from 'react-router-dom'
 
 const DashProfile = () => {
     const [imageFile, setImageFile] = useState(null)
@@ -19,7 +20,7 @@ const DashProfile = () => {
     const [showModal, setShowModal] = useState(false)
     const filePickerRef = useRef()
     const [formData, setFormData] = useState({})
-    const { currentUser, error } = useSelector(state => state.user)
+    const { currentUser, error, loading } = useSelector(state => state.user)
     const dispatch = useDispatch()
 
     const handleImageChange = (e) => {
@@ -187,7 +188,16 @@ const DashProfile = () => {
                     <TextInput onChange={handleChange} type='password' id='password' placeholder="password" />
                 </div>
 
-                <Button className='mt-3' type='submit' gradientDuoTone='purpleToBlue' outline>Update</Button>
+                <Button disabled={loading || imageUploadLoading} className='mt-3' type='submit' gradientDuoTone='purpleToBlue' outline>{(loading || imageUploadLoading) ? 'Loading...' : 'Update'}</Button>
+                {currentUser.isAdmin && (
+                    <Link to='/create-post'>
+                        <Button type='button' className='w-full' gradientDuoTone='purpleToPink'>
+                            Create A Post
+                        </Button>
+                    </Link>
+                
+                )
+                }
             </form>
 
             <div className='text-red-500 flex justify-end mt-4 text-sm'>
