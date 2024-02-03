@@ -12,14 +12,29 @@ const CreatePost = () => {
     const [imageUploadProgress, setImageUploadProgress] = useState(null)
     const [imageUploadError, setImageUploadError] = useState(null)
     const [formData, setFormData] = useState({})
+    const [imageUrl, setImageUrl] = useState(null)
+
+    console.log(file)
+
+
+    const handleSelectImage = (event)=>{
+        setImageUploadProgress(null)
+        setFile(event.target.files[0])
+        const url = URL.createObjectURL(event.target.files[0])
+        setImageUrl(url)
+        console.log(url)
+    }
 
     const handleUploadImage = async()=>{
+        setImageUploadProgress(null)
         try{
             if(!file)
             {
                 setImageUploadError("Please select an image first!")
                 return
             }
+            
+
             setImageUploadError(null)
             const storage = getStorage(app)
             const filename = new Date().getTime() + "-" + file.name
@@ -39,7 +54,6 @@ const CreatePost = () => {
                 ()=>{
                     getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) =>{
                         setImageUploadError(null)
-                        setImageUploadProgress(null)
                         setFormData({...formData, image: downloadUrl})
                         console.log("upload")
                     })
@@ -69,17 +83,21 @@ const CreatePost = () => {
             </div>
 
             <div className='p-3 flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted'>
-                <FileInput type='file' accept='image/*' sizing="sm" onChange={(e)=>setFile(e.target.files[0])} />
+                <FileInput type='file' accept='image/*' sizing="sm" onChange={handleSelectImage} />
                 <Button type='button' gradientDuoTone='purpleToBlue' size='sm' outline onClick={handleUploadImage} disabled={imageUploadProgress}>
                     {imageUploadProgress ? (
                         <div className='w-16 h-16'>
-                            <CircularProgressbar value={imageUploadProgress} text={`${imageUploadProgress || 0}%` } />
+                            <CircularProgressbar value={imageUploadProgress} text={`${imageUploadProgress || 0}%` }  styles={{
+                        path: {
+                            stroke: imageUploadProgress == 100 ? 'green' : `rgba(62, 152, 199, ${imageUploadProgress / 100})`
+                        }
+                    }}/>
                         </div>
-                    ) : "Upload"}
+                    ) : "Save"}
                 </Button>
             </div>
             {imageUploadError && <Alert color='failure'>{imageUploadError}</Alert>}
-            {formData.image && <img src={formData.image} alt="upload" className='w-full h-72 object-contain        ' />}
+            {imageUrl && <img src={imageUrl} alt="upload" className='w-full h-72 object-cover        ' />}
             <ReactQuill required theme="snow" placeholder='Write something...' className='h-64 mb-10' />
             <Button type="submit" gradientDuoTone='purpleToPink'>Publish</Button>
         </form>
