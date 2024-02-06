@@ -38,7 +38,7 @@ const Header = () => {
     }
 
   return (
-    <Navbar className='border-b-2'>
+    <Navbar className='border-b-2 navv'>
         <Link to="/" className='self-center text-sm sm:text-xl whitespace-nowrap font-semibold dark:text-white'>
             <span className='bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded px-2 py-1 text-white'>Saad's</span> Blog
         </Link>
@@ -65,7 +65,7 @@ const Header = () => {
             </Button>
 
             {currentUser ? (
-                <Dropdown arrowIcon={false} inline label={<Avatar rounded alt='user' img={currentUser.profilePicture} />}>
+                <Dropdown id="drop" arrowIcon={false} inline label={<Avatar rounded alt='user' size="md" img={currentUser.profilePicture} />}>
                     <Dropdown.Header>
                         <span className='block mb-1 text-xs font-bold '>{currentUser.username}</span>
                         <span className='block text-xs font-semibold'>{currentUser.email}</span>

@@ -10,3 +10,8 @@ body{
 .ql-container{
     font-size: 1.05rem;
 }
+
+
+.navv img{
+    object-fit: cover;
+}
