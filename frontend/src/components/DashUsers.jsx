@@ -10,6 +10,8 @@ const DashUsers = () => {
   const [showMore, setShowMore] = useState(true)
   const [showModal, setShowModal] = useState(false) 
   const [userIdToDelete, setUserIdToDelete] = useState(null)
+
+ 
  
   useEffect(() => {
     const fetchData = async () => {
@@ -52,7 +54,25 @@ const DashUsers = () => {
   }
 
 
-  const handleDelete = ()=>{}
+  const handleDelete = async()=>{
+    try{
+      console.log(userIdToDelete)
+      const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
+        method: "DELETE"
+      })
+      const data = await res.json()
+      if(res.ok)
+      {
+        setUsers(prev=>prev.filter(user=>user._id !== userIdToDelete))
+        setShowModal(false)
+      }else{
+        console.log(data.message)
+      }
+
+    }catch(err){
+      console.log(err)
+    }
+  }
   
   return (
     <div className=' overflow-x-scroll p-3 md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500'>
@@ -91,10 +111,13 @@ const DashUsers = () => {
                   {user.isAdmin ? "Admin" : "User"}
                 </Table.Cell>
                 <Table.Cell>
-                  <span onClick={()=>{
-                    setShowModal(true)
-                    setUserIdToDelete(user._id)
-                  }} className='text-red-500 font-medium hover:underline cursor-pointer'>Delete</span>
+                  {
+                    !user.isAdmin && <span onClick={()=>{
+                      setShowModal(true)
+                      setUserIdToDelete(user._id)
+                    }} className='text-red-500 font-medium hover:underline text-xs cursor-pointer'>Delete</span>
+                  }
+                  
                 </Table.Cell>
                 
                   
