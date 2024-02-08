@@ -1,12 +1,14 @@
 import { Button, TextInput, Textarea } from 'flowbite-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Comment from './Comment'
 
 
 const CommentSection = ({postId}) => {
   const [comment, setComment] = useState("")
   const {currentUser} = useSelector(state=>state.user)
+  const [comments, setComments] = useState([])
 
   const handleSubmit = async(e)=>{
       e.preventDefault()
@@ -23,10 +25,31 @@ const CommentSection = ({postId}) => {
       const data = await res.json()
 
       if(res.ok){
-        console.log("done")
         setComment("")
+        setComments([data, ...comments])
       }
   }
+
+  console.log(comments)
+
+
+  useEffect(()=>{
+    const getComments = async()=>{
+      try{
+        const res = await fetch(`/api/comment/getPostComments/${postId}`)
+        if(res.ok){
+          const data = await res.json()
+          setComments(data)
+        }
+
+      }catch(err){
+        console.log(err)
+      }
+    }
+
+    getComments()
+
+  }, [postId])
 
 
   return (
@@ -58,6 +81,21 @@ const CommentSection = ({postId}) => {
             <Button outline gradientDuoTone="purpleToBlue" type='submit'>Submit</Button>
           </div>
         </form>
+      )}
+
+      {comments.length === 0 ? (
+        <p className='text-xs my-5'>No comments yet...</p>
+      ) : (
+        <>
+          <div className='flex items-center gap-2 my-5 text-sm'>
+            <p>Comments</p>
+            <div className='border border-gray-500 py-1 px-2 rounded-sm'>
+              <p className='font-bold'>{comments.length}</p>
+            </div>
+          </div>
+
+          {comments.map(commentt => <Comment comment={commentt} key={commentt._id} />)}
+        </>
       )}
     </div>
   )
