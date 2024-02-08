@@ -1,6 +1,7 @@
 import { Button, Spinner } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import CommentSection from '../components/CommentSection'
 
 const PostPage = () => {
   const {postSlug} = useParams()
@@ -65,6 +66,8 @@ const PostPage = () => {
 
 
       <div className='mt-10 post-content p-3 max-w-3xl w-full mx-auto' dangerouslySetInnerHTML={{__html: post && post.content}}></div>
+
+      <CommentSection postId={post._id} />
       
     </main>
   )
