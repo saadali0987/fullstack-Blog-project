@@ -116,8 +116,7 @@ const CommentSection = ({postId}) => {
               <p className='font-bold'>{comments.length}</p>
             </div>
           </div>
-
-          {comments.map(commenti => <Comment comment={commenti} key={commenti._id} onLike={handleLike} />)}
+          {comments.map(commenti => <Comment comment={commenti} key={commenti._id} onLike={handleLike}/>)}
         </>
       )}
     </div>
