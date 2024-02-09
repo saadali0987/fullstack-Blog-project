@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { FaThumbsUp } from "react-icons/fa";
 import moment from 'moment'
 
-const Comment = ({comment}) => {
+const Comment = ({comment, onLike}) => {
     const [user, setUser] = useState({})
 
     console.log(user)
@@ -22,6 +23,9 @@ const Comment = ({comment}) => {
         getUser()
     }, [comment])
 
+
+  
+
   return (
     <div className='flex items-center p-4 border-b dark:border-gray-600 text-sm'>
         <div>
@@ -33,6 +37,11 @@ const Comment = ({comment}) => {
                 <span className='text-xs text-gray-500'>{moment(comment.createdAt).fromNow()}</span>
             </div>
             <p className='text-gray-500 mb-2'>{comment.content}</p>
+            <div>
+                <button onClick={()=>onLike(comment._id)} type='button' className='text-gray-400 hover:text-blue-500'>
+                    <FaThumbsUp className='text-sm' />
+                </button>
+            </div>
         </div>
     </div>
   )
