@@ -75,6 +75,10 @@ const CommentSection = ({postId}) => {
     }
   }
 
+
+  const handleEdit = async(comment, editedContent) =>{
+    setComments(comments.map(c=>c._id === comment._id ? {...c, content:editedContent} : c))
+  }
   return (
     <div className='w-full mx-auto max-w-2xl p-3'>
       {
@@ -116,7 +120,7 @@ const CommentSection = ({postId}) => {
               <p className='font-bold'>{comments.length}</p>
             </div>
           </div>
-          {comments.map(commenti => <Comment comment={commenti} key={commenti._id} onLike={handleLike}/>)}
+          {comments.map(commenti => <Comment comment={commenti} key={commenti._id} onLike={handleLike} onEdit={handleEdit}/>)}
         </>
       )}
     </div>
