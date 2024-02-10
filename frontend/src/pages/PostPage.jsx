@@ -2,12 +2,14 @@ import { Button, Spinner } from 'flowbite-react'
 import React, { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import CommentSection from '../components/CommentSection'
+import PostCard from '../components/PostCard'
 
 const PostPage = () => {
   const {postSlug} = useParams()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [post, setPost] = useState(null)
+  const [recent, setRecent] = useState(null)
 
  
 
@@ -41,6 +43,23 @@ const PostPage = () => {
   }, [postSlug])
 
 
+  useEffect(()=>{
+    try{
+      const fetchRecentPosts = async()=>{
+        const res = await fetch(`/api/post/getposts?limit=3`)
+        const data = await res.json()
+        if(res.ok){
+          setRecent(data.posts)
+        }
+      }
+      fetchRecentPosts()
+
+    }catch(err){
+      console.log(err)
+    }
+  }, [])
+
+
   if(loading) return (
     <div className='flex min-h-screen justify-center items-center'>
       <Spinner size='xl' />
@@ -57,7 +76,7 @@ const PostPage = () => {
       </Link>
       )}
 
-      <img src={post.image} alt="postimg" className='mt-10 max-h-[600px] max-w-[600px] mx-auto object-cover p-3'  />
+      <img src={post.image} alt="postimg" className='mt-10 max-h-[600px] max-w-full sm:max-w-[600px]  mx-auto object-cover p-3'  />
 
       <div className='flex justify-between p-3 border-b border-slate-500 text-xs'>
         <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
@@ -68,6 +87,18 @@ const PostPage = () => {
       <div className='mt-10 post-content p-3 max-w-3xl w-full mx-auto' dangerouslySetInnerHTML={{__html: post && post.content}}></div>
 
       <CommentSection postId={post._id} />
+
+      <div className='flex flex-col justify-center items-center mb-5'>
+        <h1 className='text-xl mt-5'>Recent Blogs</h1>
+
+        <div className='flex flex-wrap gap-20 mt-10 justify-center'>
+          {
+            recent && recent.map(recentPost=>(
+              <PostCard key={recentPost._id} post={recentPost} />
+            ))
+          }
+        </div>
+      </div>
       
     </main>
   )
