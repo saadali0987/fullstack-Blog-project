@@ -17,8 +17,8 @@ const Home = () => {
   return (
     <div>
       <div className='flex flex-col gap-6 px-3 p-28 max-w-6xl mx-auto'>
-        <h1 className='font-bold text-3xl lg:text-6xl'>Welcome To My Blog</h1>
-        <p className='text-gray-500 text-xs sm:text-sm'>chippi chippi chappa chappa dubbi dubbi dabba dabba magico mi</p>
+        <h1 className='font-bold text-3xl lg:text-6xl'>Welcome To <span className='bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded px-2  text-white'>Saad's</span> Blog</h1>
+        <p className='text-gray-500 text-xs sm:text-sm'>Here you will find blogs on various topics related to MERN stack development.</p>
         <Link to="/search" className='text-xs sm:text-sm text-teal-500 font-bold hover:underline' >View All Blogs</Link>
       </div>
 
@@ -27,7 +27,7 @@ const Home = () => {
           posts && posts.length > 0 && (
             <div className='flex flex-col gap-6'>
               <h2 className='text-2xl font-semibold text-center'>Recent Posts</h2>
-              <div className=' flex justify-center flex-wrap gap-4'>
+              <div className=' flex justify-center flex-wrap gap-16'>
                 {posts.map(post=>(
                   <PostCard key={post._id} post={post} />
                 ))}

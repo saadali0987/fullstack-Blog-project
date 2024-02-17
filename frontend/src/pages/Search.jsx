@@ -133,7 +133,7 @@ const Search = () => {
 
         <div className='w-full'>
             <h1 className='text-3xl font-semibold sm:border-b border-gray-500 p-3 mt-5'>Results:</h1>
-            <div className='flex flex-wrap gap-4 p-7'>
+            <div className='flex flex-wrap gap-16 p-7 mx-auto justify-center'>
                 {!loading && posts.length === 0 && <p className='text-xl text-gray-500'>No Posts Found...</p>}
 
                 {loading &&  <p className='text-xl text-gray-500'>Loading...</p>}
